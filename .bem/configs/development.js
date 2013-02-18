@@ -1,4 +1,4 @@
-process.env.BEMHTML_ENV = 'development';
+//process.env.BEMHTML_ENV = 'development';
 
 var relative = require('path').relative.bind(null, __dirname);
 
