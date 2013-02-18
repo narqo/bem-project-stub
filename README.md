@@ -1,7 +1,8 @@
 Minimal configs and folders to start BEM project
 ================================================
 
-### Usage
+Usage
+-----
 
     › git clone git://github.com/narqo/bem-project-stub.git project
     › cd project
