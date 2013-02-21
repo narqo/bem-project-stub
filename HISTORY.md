@@ -1,4 +1,10 @@
 
+0.2.3, 2013-02-22
+-----------------
+
+  - repo.db: "bl-controls" library is now called "bem-controls"
+  - repo.db: "bem-html" deprecated library removed
+
 0.2.2, 2013-02-18
 -----------------
 
