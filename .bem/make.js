@@ -1,6 +1,6 @@
 /*global MAKE:true */
 
-require('./nodes/arch');
+require('./nodes');
 
 MAKE.decl('Arch', {
 
