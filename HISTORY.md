@@ -1,4 +1,9 @@
 
+0.2.4, 2013-03-12
+-----------------
+
+  - libraries path should be calculated relative to build root
+
 0.2.3, 2013-02-22
 -----------------
 
