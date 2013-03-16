@@ -95,7 +95,7 @@ var PATH = require('path'),
      * @returns {String}
      */
     getLibPath = exports.getLibPath = function() {
-        var args = [].splice.call(arguments, 0);
+        var args = [].slice.call(arguments, 0);
         return join.apply(null, [environ.LIB_ROOT].concat(args));
     },
 
