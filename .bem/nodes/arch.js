@@ -13,8 +13,9 @@ var environ = require('../environ'),
 registry.decl('Arch', {
 
     /**
-     * Задает список необходимых библиотек
-     * @param {Array} libs Массив идентификаторов необходимых библиотек
+     * Defines projects libraries dependencies base on environ's config
+     *
+     * @param {Array} libs Array of libraries' ids
      * @return {Object}
      */
     useLibraries : function(libs) {
@@ -62,8 +63,45 @@ registry.decl('Arch', {
             this.arch.setNode(node, null, libs);
         }
 
-        return libs;
+        /**
+         * XXX: hack!
+         * Saving array of lib nodes for future substraction from Block|Bundles nodes
+         */
+        return this._libsNode = libs;
 
+    },
+
+    /**
+     * Substracting LibrariesNodes from `nodes` array for prevent linking them with
+     * caller nodes
+     *
+     * @param {Array} nodes
+     * @returns {Array}
+     */
+    substractLibrariesNodes : function(nodes) {
+
+        return this.opts.force? nodes : nodes.filter(function(n) {
+            return !~this._libsNode.indexOf(n);
+        }, this);
+
+    },
+
+    /**
+     * @override
+     */
+    createBlocksLevelsNodes: function(parent, children) {
+
+        return this.__base.call(this, parent,
+                this.substractLibrariesNodes.call(this, children));
+
+    },
+
+    /**
+     * @override
+     */
+    createBundlesLevelsNodes: function(parent, children) {
+        return this.__base.call(this, parent,
+                this.substractLibrariesNodes.call(this, children));
     }
 
 });
