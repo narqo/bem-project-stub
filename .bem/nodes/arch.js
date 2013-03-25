@@ -100,8 +100,10 @@ registry.decl('Arch', {
      * @override
      */
     createBundlesLevelsNodes: function(parent, children) {
+
         return this.__base.call(this, parent,
                 this.substractLibrariesNodes.call(this, children));
+
     }
 
 });
