@@ -1,4 +1,10 @@
 
+0.3.0, 2013-03-25
+-----------------
+
+  - libraries nodes were unlinked from blocks/bundles building process,
+  use `--force` build-flag to link them back (see #4 for details)
+
 0.2.4, 2013-03-12
 -----------------
 
