@@ -11,7 +11,9 @@ exports.getConfig = function() {
                 'blocks-common',
                 'blocks-desktop'
             ]
-            .map(environ.getLibPath.bind(null, 'bem-bl'))
+            .map(function(path) {
+                return environ.getLibPath('bem-bl', path);
+            })
             .concat(this.resolvePaths([
                 '../../common.blocks',
                 '../../desktop.blocks'

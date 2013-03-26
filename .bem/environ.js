@@ -110,7 +110,6 @@ var PATH = require('path'),
         return relative(environ.PRJ_ROOT, getLibPath.apply(null, arguments));
     };
 
-
 if(__root !== __dirname) {
     try {
         // Переопределяем константы `__extendables` из окружения проекта `ENV_ROOT`
@@ -130,13 +129,6 @@ if(__root !== __dirname) {
 }
 
 function getGlobalRoot() {
-//    var root = BEM.require('./env').getEnv('__root_level_dir');
-    // FIXME: подумать, как обойтись без `env`
     var root = process.env.__root_level_dir;
-    if(!root) {
-        require('bem/lib/logger').warn('[environ] variable "__root_level_dir" is not set properly');
-        root = __dirname;
-    }
-
-    return root;
+    return root || (root = __dirname);
 }

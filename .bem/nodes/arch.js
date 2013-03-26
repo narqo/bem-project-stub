@@ -67,7 +67,7 @@ registry.decl('Arch', {
          * XXX: hack!
          * Saving array of lib nodes for future substraction from Block|Bundles nodes
          */
-        return this._libsNode = libs;
+        return this._libraries = libs;
 
     },
 
@@ -81,7 +81,7 @@ registry.decl('Arch', {
     substractLibrariesNodes : function(nodes) {
 
         return this.opts.force? nodes : nodes.filter(function(n) {
-            return !~this._libsNode.indexOf(n);
+            return !~this._libraries.indexOf(n);
         }, this);
 
     },
