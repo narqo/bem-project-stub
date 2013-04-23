@@ -1,4 +1,4 @@
-/*global MAKE:true */
+/* global MAKE:false */
 
 require('./nodes');
 
@@ -8,7 +8,7 @@ MAKE.decl('Arch', {
 
     bundlesLevelsRegexp: /^.+?\.bundles$/,
 
-    libraries : [ 'bem-bl' ]
+    libraries: [ 'bem-bl' ]
 
 });
 
