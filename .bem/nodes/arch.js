@@ -2,10 +2,8 @@ var PATH = require('path'),
     GLOBAL_ROOT_NAME = '__root_level_dir';
 
 // XXX: `__root_level_dir` должна быть установлена только один раз
-// FIXME: подумать, как обойтись без `env`
 process.env[GLOBAL_ROOT_NAME] ||
     (process.env[GLOBAL_ROOT_NAME] = PATH.dirname(__dirname));
-
 
 var environ = require('../environ'),
     registry = require('bem/lib/nodesregistry');
@@ -55,13 +53,11 @@ registry.decl('Arch', {
      */
     createBlockLibrariesNodes : function() {
 
-        var libs = this.__base.apply(this, arguments),
-            libsNodeName = environ.LIB_DIR;
+        var libs = this.__base.apply(this, this.opts.force? arguments : null),
+            libsNodeName = environ.LIB_DIR,
+            node = new (registry.getNodeClass('Node'))(libsNodeName || 'libraries');
 
-        if(libsNodeName && libsNodeName !== '.') {
-            var node = new (registry.getNodeClass('Node'))(libsNodeName);
-            this.arch.setNode(node, null, libs);
-        }
+        this.arch.setNode(node, null, libs);
 
         /**
          * XXX: hack!
@@ -81,7 +77,7 @@ registry.decl('Arch', {
     substractLibrariesNodes : function(nodes) {
 
         return this.opts.force? nodes : nodes.filter(function(n) {
-            return !~this._libraries.indexOf(n);
+            return this._libraries.indexOf(n) === -1;
         }, this);
 
     },
@@ -89,7 +85,7 @@ registry.decl('Arch', {
     /**
      * @override
      */
-    createBlocksLevelsNodes: function(parent, children) {
+    createBlocksLevelsNodes : function(parent, children) {
 
         return this.__base.call(this, parent,
                 this.substractLibrariesNodes.call(this, children));
@@ -99,7 +95,7 @@ registry.decl('Arch', {
     /**
      * @override
      */
-    createBundlesLevelsNodes: function(parent, children) {
+    createBundlesLevelsNodes : function(parent, children) {
 
         return this.__base.call(this, parent,
                 this.substractLibrariesNodes.call(this, children));
