@@ -55,7 +55,8 @@ registry.decl('Arch', {
 
         var libs = this.__base.apply(this, this.opts.force? arguments : null),
             libsNodeName = environ.LIB_DIR,
-            node = new (registry.getNodeClass('Node'))(libsNodeName || 'libraries');
+            node = new (registry.getNodeClass('Node'))(
+                    libsNodeName === '.'? 'libraries' : libsNodeName);
 
         this.arch.setNode(node, null, libs);
 
