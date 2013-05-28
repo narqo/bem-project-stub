@@ -1,5 +1,6 @@
 var PATH = require('path'),
-    GLOBAL_ROOT_NAME = '__root_level_dir';
+    GLOBAL_ROOT_NAME = '__root_level_dir',
+    DECL_SEP = '@';
 
 // XXX: `__root_level_dir` должна быть установлена только один раз
 process.env[GLOBAL_ROOT_NAME] ||
@@ -17,22 +18,32 @@ registry.decl('Arch', {
      * @return {Object}
      */
     useLibraries : function(libs) {
-
-        // список изветсных библиотек блоков
+        // {Array} known libraries
         var repo = environ.getConf().libraries,
             relative = PATH.relative.bind(null, this.root),
             getLibPath = environ.getLibPath;
 
         return libs.reduce(function(enabled, lib) {
+            var treeish;
 
-            if(repo[lib] == null)
+            if(lib.indexOf(DECL_SEP) !== -1) {
+                var parts = lib.split(DECL_SEP);
+
+                lib = parts[0].trim();
+                treeish = parts.splice(1).join(DECL_SEP).trim();
+            }
+
+            if(repo[lib] == null) {
                 throw new Error('Library ' + lib + ' is not registered!');
+            }
 
-            enabled[relative(getLibPath(lib))] = repo[lib];
+            var decl = repo[lib];
+            treeish && (decl.treeish = treeish);
+
+            enabled[relative(getLibPath(lib))] = decl;
+
             return enabled;
-
         }, {});
-
     },
 
     /**
@@ -40,11 +51,9 @@ registry.decl('Arch', {
      * @override
      */
     getLibraries : function() {
-
         var libs = this.libraries;
         return Array.isArray(libs)?
                 this.useLibraries(libs) : libs;
-
     },
 
     /**
@@ -52,7 +61,6 @@ registry.decl('Arch', {
      * @override
      */
     createBlockLibrariesNodes : function() {
-
         var libs = this.__base.apply(this, this.opts.force? arguments : null),
             libsNodeName = environ.LIB_DIR,
             node = new (registry.getNodeClass('Node'))(
@@ -62,10 +70,9 @@ registry.decl('Arch', {
 
         /**
          * XXX: hack!
-         * Saving array of lib nodes for future substraction from Block|Bundles nodes
+         * Saving array of lib nodes for future subtraction from Block|Bundles nodes
          */
         return this._libraries = libs;
-
     },
 
     /**
@@ -75,32 +82,26 @@ registry.decl('Arch', {
      * @param {Array} nodes
      * @returns {Array}
      */
-    substractLibrariesNodes : function(nodes) {
-
+    subtractLibrariesNodes : function(nodes) {
         return this.opts.force? nodes : nodes.filter(function(n) {
             return this._libraries.indexOf(n) === -1;
         }, this);
-
     },
 
     /**
      * @override
      */
-    createBlocksLevelsNodes : function(parent, children) {
-
+    createBlocksLevelsNodes: function(parent, children) {
         return this.__base.call(this, parent,
-                this.substractLibrariesNodes.call(this, children));
-
+                this.subtractLibrariesNodes.call(this, children));
     },
 
     /**
      * @override
      */
-    createBundlesLevelsNodes : function(parent, children) {
-
+    createBundlesLevelsNodes: function(parent, children) {
         return this.__base.call(this, parent,
-                this.substractLibrariesNodes.call(this, children));
-
+                this.subtractLibrariesNodes.call(this, children));
     }
 
 });
