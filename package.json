@@ -13,7 +13,7 @@
     "bem-environ": "git://github.com/narqo/bem-environ.git#npm"
   },
   "devDependencies": {
-    "bem": "~0.5.23"
+    "bem": "~0.6.7"
   },
   "author": "",
   "private": true
