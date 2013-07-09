@@ -9,6 +9,9 @@
   "engines": {
     "node": ">=0.6"
   },
+  "dependencies": {
+    "bem-environ": "git://github.com/narqo/bem-environ.git#npm"
+  },
   "devDependencies": {
     "bem": "~0.5.23"
   },
