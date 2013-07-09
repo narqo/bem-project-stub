@@ -1,1 +1,1 @@
-require('./arch.js');
+require('bem-environ/lib/nodes');
